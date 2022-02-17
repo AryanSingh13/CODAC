@@ -1,7 +1,6 @@
 import argparse
 import json 
 import os
-from d4rl.infos import REF_MIN_SCORE, REF_MAX_SCORE
 
 import wandb
 from sac import SAC, CQL, ReplayMemory
@@ -119,13 +118,7 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
             rewards_std = np.std(rewards, axis=0)
             sorted_rewards = np.sort(rewards)
             cvar = sorted_rewards[:int(0.1 * sorted_rewards.shape[0])].mean()
-            if args.d4rl:
-                env_name = args.env
-                min_score = REF_MIN_SCORE[env_name]
-                max_score = REF_MAX_SCORE[env_name]
-                normalized_score = 100 * (rewards_avg - min_score) / (max_score - min_score)
-            else:
-                normalized_score = rewards_avg
+            normalized_score = rewards_avg
 
             print("")
             print(f'Epoch {epoch_step} Eval_Reward {rewards_avg:.2f} Eval_Cvar {cvar:.2f} Eval_Std {rewards_std:.2f} Normalized_Score {normalized_score:.2f}')
@@ -167,6 +160,7 @@ def main():
         args.entropy_tuning = True
     args.adapt = False
     args.d4rl = False
+    # Load Park environment here
     if args.env == "riskymass":
         args.entropy_tuning = False
         from env.risky_pointmass import PointMass
@@ -194,7 +188,7 @@ def main():
         env, dataset = load_d4rl_dataset(args.env)
         args.dataset = args.env
         args.d4rl = True
-
+    #######################################################################
     os.makedirs(f'saved_policies/{args.env}/{args.dataset}', exist_ok=True)
 
     # only use batch data for model-free methods

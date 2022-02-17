@@ -1,6 +1,5 @@
 import argparse
 import os
-from d4rl.infos import REF_MIN_SCORE, REF_MAX_SCORE
 
 import wandb
 from sac import SAC, CQL, ReplayMemory
@@ -133,25 +132,17 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
 def main():
     args = readParser()
 
-    if args.env == "riskymass" or args.env == 'AntObstacle-v0':
-        if args.algo == 'codac':
-            run_name = f"online-{args.risk_prob}-{args.risk_penalty}-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}"
-            if args.adapt:
-                run_name = f"online-{args.risk_prob}-{args.risk_penalty}-adapt-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}"
-
-        else:
-            run_name = f"online-{args.risk_prob}-{args.risk_penalty}-{args.algo}-E{args.entropy}-{args.seed}"
+    if args.algo == 'codac':
+        run_name = f"online-{args.env}-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}"
     else:
-        if args.algo == 'codac':
-            run_name = f"online-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}"
-        else:
-            run_name = f"online-{args.algo}-E{args.entropy}-{args.seed}"
+        run_name = f"online-{args.env}-{args.algo}-E{args.entropy}-{args.seed}"
 
     # Initial environment
     args.entropy_tuning = False
     if args.entropy == "true":
         args.entropy_tuning = True
    
+    # Load Park-Environment here
     if args.env == "riskymass":
         from env.risky_pointmass import PointMass
         env = PointMass(risk_prob=args.risk_prob, risk_penalty=args.risk_penalty)
