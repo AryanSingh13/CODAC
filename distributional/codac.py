@@ -64,19 +64,21 @@ class CODAC(object):
         self.num_random = num_random
         self.min_z_weight = min_z_weight
 
-        self.zf1 = QuantileMlp(input_size=num_inputs+action_space.shape[0],
+        print(num_inputs)
+        print()
+        self.zf1 = QuantileMlp(input_size=num_inputs+action_space.n,
                           output_size=1,
                           num_quantiles=num_quantiles,
                           hidden_sizes=[hidden_size, hidden_size]).to(self.device)
-        self.zf2 = QuantileMlp(input_size=num_inputs+action_space.shape[0],
+        self.zf2 = QuantileMlp(input_size=num_inputs+action_space.n,
                           output_size=1,
                           num_quantiles=num_quantiles,
                           hidden_sizes=[hidden_size, hidden_size]).to(self.device)
-        self.target_zf1 = QuantileMlp(input_size=num_inputs+action_space.shape[0],
+        self.target_zf1 = QuantileMlp(input_size=num_inputs+action_space.n,
                           output_size=1,
                           num_quantiles=num_quantiles,
                           hidden_sizes=[hidden_size, hidden_size]).to(self.device)
-        self.target_zf2 = QuantileMlp(input_size=num_inputs+action_space.shape[0],
+        self.target_zf2 = QuantileMlp(input_size=num_inputs+action_space.n,
                           output_size=1,
                           num_quantiles=num_quantiles,
                           hidden_sizes=[hidden_size, hidden_size]).to(self.device)
@@ -98,7 +100,7 @@ class CODAC(object):
 
         # Target Entropy = −dim(A) (e.g. , -6 for HalfCheetah-v2) as given in the paper
         if self.use_automatic_entropy_tuning == True:
-            self.target_entropy = -torch.prod(torch.Tensor(action_space.shape).to(self.device)).item()
+            self.target_entropy = -torch.prod(torch.Tensor(action_space.n).to(self.device)).item()
             if self.target_entropy != 'auto':
                 self.target_entropy = target_entropy
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
@@ -106,8 +108,8 @@ class CODAC(object):
         else:
             self.alpha = alpha
 
-        self.policy = GaussianPolicy(num_inputs, action_space.shape[0], hidden_size, action_space).to(self.device)
-        self.target_policy = GaussianPolicy(num_inputs, action_space.shape[0], hidden_size, action_space).to(self.device)
+        self.policy = GaussianPolicy(num_inputs, action_space.n, hidden_size, action_space).to(self.device)
+        self.target_policy = GaussianPolicy(num_inputs, action_space.n, hidden_size, action_space).to(self.device)
 
         self.optimizer_actor = Adam(self.policy.parameters(), lr=actor_lr)
  

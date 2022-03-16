@@ -89,9 +89,9 @@ class GaussianPolicy(nn.Module):
             self.action_bias = torch.tensor(0.)
         else:
             self.action_scale = torch.FloatTensor(
-                (action_space.high - action_space.low) / 2.)
+                [(action_space.n) / 2.])
             self.action_bias = torch.FloatTensor(
-                (action_space.high + action_space.low) / 2.)
+                [(action_space.n) / 2.])
 
     def forward(self, state):
         x = F.relu(self.linear1(state))
@@ -145,9 +145,9 @@ class DeterministicPolicy(nn.Module):
             self.action_bias = 0.
         else:
             self.action_scale = torch.FloatTensor(
-                (action_space.high - action_space.low) / 2.)
+                [(action_space.n) / 2.])
             self.action_bias = torch.FloatTensor(
-                (action_space.high + action_space.low) / 2.)
+                [(action_space.n) / 2.])
 
     def forward(self, state):
         x = F.relu(self.linear1(state))

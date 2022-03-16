@@ -8,4 +8,5 @@ wandb
 risky_saved_policies
 .idea
 .vscode
+d4rl/
 **/__pycache__

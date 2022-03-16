@@ -7,9 +7,9 @@ from models import ProbEnsemble, PredictEnv
 
 from batch_utils import *
 from mbrl_utils import *
-from utils import *
 
 from tqdm import tqdm
+from env.park_gym_wrapper import ParkGymWrapper
 
 
 def readParser():
@@ -143,21 +143,11 @@ def main():
         args.entropy_tuning = True
    
     # Load Park-Environment here
-    if args.env == "riskymass":
-        from env.risky_pointmass import PointMass
-        env = PointMass(risk_prob=args.risk_prob, risk_penalty=args.risk_penalty)
-        args.epoch_length = 100
-        args.num_epoch = 100
-    elif args.env == 'AntObstacle-v0':
-        import env
-        env = gym.make(args.env)
-        env.set_risk(args.risk_prob, args.risk_penalty)
-        args.epoch_length = 200
-        args.num_epoch = 5000
-        args.eval_n_episodes = 100
-    else:
-        args.num_epoch = 1000
-        env, dataset = load_d4rl_dataset(args.env)
+    env = ParkGymWrapper(args.env)
+    env.set_risk(args.risk_prob, args.risk_penalty)
+    args.epoch_length = 200
+    args.num_epoch = 5000
+    args.eval_n_episodes = 100
 
     os.makedirs(f'saved_policies/{args.env}/online', exist_ok=True)
     os.makedirs(f'dataset/{args.env}', exist_ok=True)

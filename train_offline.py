@@ -10,6 +10,7 @@ from mbrl_utils import *
 from utils import *
 
 from tqdm import tqdm
+from env.park_gym_wrapper import ParkGymWrapper
 
 MODEL_FREE = ['sac', 'cql', 'codac']
 
@@ -148,7 +149,7 @@ def main():
 
     # Load config from config file
     try:
-        config = json.load(open('configs/d4rl_configs.json', 'r'))[args.env]
+        config = json.load(open('configs/park_configs.json', 'r'))[args.env]
         args.min_z_weight = config['min_z_weight']
         args.lag = config['lag']
         args.actor_lr = config['actor_lr']
@@ -161,6 +162,12 @@ def main():
     args.adapt = False
     args.d4rl = False
     # Load Park environment here
+    env = ParkGymWrapper(args.env)
+    env.set_risk(args.risk_prob, args.risk_penalty)
+    args.epoch_length = 200
+    args.num_epoch = 5000
+    args.eval_n_episodes = 100
+
     if args.env == "riskymass":
         args.entropy_tuning = False
         from env.risky_pointmass import PointMass
@@ -188,6 +195,7 @@ def main():
         env, dataset = load_d4rl_dataset(args.env)
         args.dataset = args.env
         args.d4rl = True
+    # Need to load PARK dataset
     #######################################################################
     os.makedirs(f'saved_policies/{args.env}/{args.dataset}', exist_ok=True)
 

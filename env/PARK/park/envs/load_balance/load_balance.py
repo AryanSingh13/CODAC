@@ -66,7 +66,15 @@ class LoadBalanceEnv(core.Env):
         # finished jobs (for logging at the end)
         self.finished_jobs = []
         # reset environment (generate new jobs)
+        self.risk_prob = 1
+        self.risk_pen = 0
         self.reset()
+
+    def set_risk_prob(self, risk_prob):
+        self.risk_prob = risk_prob
+    
+    def set_risk_penalty(self, risk_pen):
+        self.risk_pen = risk_pen
 
     def generate_job(self):
         if self.num_stream_jobs_left > 0:
@@ -162,6 +170,7 @@ class LoadBalanceEnv(core.Env):
     def step(self, action):
 
         # 0 <= action < num_servers
+        print(action)
         assert self.action_space.contains(action)
 
         # schedule job to server
@@ -225,5 +234,8 @@ class LoadBalanceEnv(core.Env):
 
         done = ((len(self.timeline) == 0) and \
                self.incoming_job is None)
+
+        if np.random.uniform() > self.risk_prob: 
+            reward -= self.risk_pen
 
         return self.observe(), reward, done, {'curr_time': self.wall_time.curr_time}

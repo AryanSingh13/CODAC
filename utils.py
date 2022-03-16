@@ -1,35 +1,8 @@
-import d4rl
 import gym
 import numpy as np
 import torch
 
 from torch.utils.data import TensorDataset, DataLoader
-
-
-def combine_d4rl_dataset(env_name='hopper', threshold=250000):
-    data_types = ['random', 'medium', 'medium-replay', 'expert']
-
-    dataset = None
-    for data_type in data_types:
-        dataset_name = f'{env_name}-{data_type}-v0'
-        env, current_dataset = load_d4rl_dataset(dataset_name)
-        if dataset is None:
-            dataset = current_dataset
-            for key in dataset.keys():
-                dataset[key] = dataset[key][:threshold]
-        else:
-            for key in dataset.keys():
-                dataset[key] = np.concatenate([dataset[key], current_dataset[key][:threshold]], axis=0)
-
-    return env, dataset
-
-
-def load_d4rl_dataset(env_name='halfcheetah-expert-v0'):
-    env = gym.make(env_name)
-    dataset = d4rl.qlearning_dataset(env)
-    # dataset['rewards'] = np.expand_dims(dataset['rewards'], axis=1)
-    # dataset['terminals'] = np.expand_dims(dataset['terminals'], axis=1)
-    return env, dataset
 
 def load_normalized_dataset(env_name='hopper', dataset_name='medium-replay-v0'):
     x_train, y_train, x_test, y_test = np.load(f'data/{env_name}-{dataset_name}-normalized-data.npy', allow_pickle=True)
@@ -139,4 +112,4 @@ def batch_generator(index_array, batch_size):
 
 
 if __name__ == '__main__':
-    combine_d4rl_dataset('hopper')
+    pass
