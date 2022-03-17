@@ -3,6 +3,7 @@ sys.path.insert(1, "./PARK")
 
 import gym 
 import park
+import numpy as np
 
 class ParkGymWrapper(gym.Env):
     def __init__(self, env_name):
@@ -21,7 +22,7 @@ class ParkGymWrapper(gym.Env):
         if type(space) == park.spaces.Box:
             return self.get_gym_box_space(space)
         elif type(space) == park.spaces.Discrete:
-            return self.get_gym_discrete_space(space)
+            return self.get_gym_box_from_discrete(space)
         
         print(type(space))
         raise NotImplementedError
@@ -36,6 +37,15 @@ class ParkGymWrapper(gym.Env):
             high = space.high,
             shape = space.shape, 
             dtype = space.dtype
+        )
+
+    def get_gym_box_from_discrete(self, space): 
+        n = space.n
+        return gym.spaces.Box(
+            low = 0,
+            high = n - 1,
+            shape = (1,),
+            dtype = np.int64
         )
     
     def get_gym_discrete_space(self, space):

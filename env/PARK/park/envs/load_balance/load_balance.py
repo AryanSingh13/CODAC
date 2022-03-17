@@ -170,7 +170,7 @@ class LoadBalanceEnv(core.Env):
     def step(self, action):
 
         # 0 <= action < num_servers
-        print(action)
+        action = int(action[0])
         assert self.action_space.contains(action)
 
         # schedule job to server
