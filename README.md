@@ -5,9 +5,9 @@ Currently the repository is in active development and there are things to be fix
 
 Tasks: 
 
-[x] Port CODAC to run with PARK
-[] Use risk penalty and risk probability in PARK environments 
-[] Verify and implement which dataset to be loaded, right now the train_offline script loads the epoch1 run, which should be changed. 
+- [x] Port CODAC to run with PARK
+- [ ] Use risk penalty and risk probability in PARK environments 
+- [ ] Verify and implement which dataset to be loaded, right now the train_offline script loads the epoch1 run, which should be changed. 
 
 ## Installations
 
