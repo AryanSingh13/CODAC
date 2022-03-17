@@ -83,8 +83,8 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
     qvel_size = int((state_size + 1) / 2)
 
     exploration_before_start(args, env_sampler, env_pool, agent, init_exploration_steps=1000)
-    save_interval = int(args.num_epoch / 10)
-    eval_interval = int(args.num_epoch / 100)
+    save_interval = 1 #int(args.num_epoch / 10)
+    eval_interval = 1 #int(args.num_epoch / 100)
 
     for epoch_step in tqdm(range(args.num_epoch)):
         # save buffer for offline learning

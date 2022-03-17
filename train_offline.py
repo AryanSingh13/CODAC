@@ -134,14 +134,9 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
 def main():
     args = readParser()
 
-    if args.env == 'riskymass' or args.env == 'AntObstacle-v0':
-        run_name = f"offline-{args.risk_prob}-{args.risk_penalty}-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}"
-        if 'dsac' in args.algo:
-            run_name = f"offline-{args.risk_prob}-{args.risk_penalty}-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-Z{args.min_z_weight}-L{args.lag}-E{args.entropy}-{args.seed}"
-    else:
-        run_name = f"offline-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-{args.seed}"
-        if 'dsac' in args.algo:
-            run_name = f"offline-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-Z{args.min_z_weight}-L{args.lag}-E{args.entropy}-{args.seed}"
+    run_name = f"offline-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-{args.seed}"
+    if 'dsac' in args.algo:
+        run_name = f"offline-{args.algo}-{args.dist_penalty_type}-{args.risk_type}{args.risk_param}-Z{args.min_z_weight}-L{args.lag}-E{args.entropy}-{args.seed}"
 
     # Initial environment
     args.num_epoch = 1000
@@ -167,36 +162,11 @@ def main():
     args.epoch_length = 200
     args.num_epoch = 5000
     args.eval_n_episodes = 100
+    dataset_name = f"online-{args.env}-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}-epoch1"
+    dataset = np.load(f'dataset/{args.env}/{dataset_name}.npy', allow_pickle=True).item()
+    args.dataset = dataset_name
 
-    if args.env == "riskymass":
-        args.entropy_tuning = False
-        from env.risky_pointmass import PointMass
-        env = PointMass(risk_prob=args.risk_prob, risk_penalty=args.risk_penalty)
-        args.epoch_length = 100
-        args.num_epoch = 100
-        args.eval_n_episodes = 100
-        dataset_name = f'online-{args.risk_prob}-{args.risk_penalty}-codac-neutral0.1-Etrue-0-epoch{args.dataset_epoch}'
-        print(f'Dataset used: {dataset_name}')
-        dataset = np.load(f'dataset/{args.env}/{dataset_name}.npy', allow_pickle=True).item()
-        args.dataset = dataset_name
-    elif args.env == 'AntObstacle-v0':
-        import env
-        env = gym.make(args.env)
-        env.set_risk(args.risk_prob, args.risk_penalty)
-        args.epoch_length = 200
-        args.num_epoch = 5000
-        args.eval_n_episodes = 100
-        dataset_name = f'onlinev3-{args.risk_prob}-{args.risk_penalty}-codac-neutral0.1-Etrue-0-epoch{args.dataset_epoch}'
-        print(f'Dataset used: {dataset_name}')
-        dataset = np.load(f'dataset/{args.env}/{dataset_name}.npy', allow_pickle=True).item()
-        args.dataset = dataset_name
-    else:
-        env_type, dataset_type = args.env.split('-')[0], args.env.split('-')[-2]
-        env, dataset = load_d4rl_dataset(args.env)
-        args.dataset = args.env
-        args.d4rl = True
-    # Need to load PARK dataset
-    #######################################################################
+    print("Dataset loaded")
     os.makedirs(f'saved_policies/{args.env}/{args.dataset}', exist_ok=True)
 
     # only use batch data for model-free methods
