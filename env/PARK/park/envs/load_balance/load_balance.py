@@ -68,6 +68,7 @@ class LoadBalanceEnv(core.Env):
         # reset environment (generate new jobs)
         self.risk_prob = 1
         self.risk_pen = 0
+        self.load_risk_thresh = 0.8
         self.reset()
 
     def set_risk_prob(self, risk_prob):
@@ -82,6 +83,19 @@ class LoadBalanceEnv(core.Env):
             t = self.wall_time.curr_time
             self.timeline.push(t + dt, size)
             self.num_stream_jobs_left -= 1
+
+    def is_unsafe(self): 
+        for server in self.servers:
+            load = sum(j.size for j in server.queue)
+            if server.curr_job is not None:
+                # remaining work currently being processed
+                load += server.curr_job.finish_time - self.wall_time.curr_time
+            # if the load is larger than observation threshold
+            # report unsafe
+            if load > self.obs_high[server.server_id] * self.load_risk_thresh:
+                return True
+
+        return False
 
     def generate_jobs(self):
         all_t, all_size = generate_jobs(self.num_stream_jobs, self.np_random)
@@ -235,7 +249,9 @@ class LoadBalanceEnv(core.Env):
         done = ((len(self.timeline) == 0) and \
                self.incoming_job is None)
 
-        if np.random.uniform() > self.risk_prob: 
-            reward -= self.risk_pen
+        if self.is_unsafe(): 
+            random_num = np.random.uniform()
+            if random_num > self.risk_prob:
+                reward -= self.risk_pen
 
         return self.observe(), reward, done, {'curr_time': self.wall_time.curr_time}
