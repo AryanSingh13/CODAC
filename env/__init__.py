@@ -1,5 +1,5 @@
 import gym
-from env.ant_obstacle import AntObstacleEnv
+#from env.ant_obstacle import AntObstacleEnv
 from gym.envs.registration import register
 
 register(
