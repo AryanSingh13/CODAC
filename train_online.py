@@ -122,7 +122,8 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
             cvar = sorted_rewards[:int(0.1*sorted_rewards.shape[0])].mean()
             print("")
             print(f'Epoch {epoch_step} Eval_Reward {rewards_avg:.2f} Eval_Cvar {cvar:.2f} Eval_Std {rewards_std:.2f}')
-            if args.wandb:
+            #if args.wandb:
+            if True:
                 wandb.log({'epoch':epoch_step,
                            'eval_reward': rewards_avg,
                            'eval_cvar0.1': cvar,
@@ -156,7 +157,8 @@ def main():
     if args.algo in ['sac', 'cql', 'codac']:
         args.real_ratio = 1.0
     
-    if args.wandb:
+    #if args.wandb:
+    if True:
         print("wandb")
         wandb.init(project='codac',
                    group=args.env,
