@@ -157,6 +157,7 @@ def main():
         args.real_ratio = 1.0
     
     if args.wandb:
+        print("wandb")
         wandb.init(project='codac',
                    group=args.env,
                    name=run_name,
