@@ -123,7 +123,8 @@ def train(args, env_sampler, predict_env, agent, env_pool, model_pool):
 
             print("")
             print(f'Epoch {epoch_step} Eval_Reward {rewards_avg:.2f} Eval_Cvar {cvar:.2f} Eval_Std {rewards_std:.2f} Normalized_Score {normalized_score:.2f}')
-            if args.wandb:
+            #if args.wandb:
+            if True:
                 wandb.log({'epoch': epoch_step,
                            'eval_reward': rewards_avg,
                            'normalized_score': normalized_score,
@@ -162,7 +163,7 @@ def main():
     args.epoch_length = 200
     args.num_epoch = 5000
     args.eval_n_episodes = 100
-    dataset_name = f"online-{args.env}-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}-epoch1"
+    dataset_name = f"online-{args.env}-{args.algo}-{args.risk_type}{args.risk_param}-E{args.entropy}-{args.seed}-epoch5000"
     dataset = np.load(f'dataset/{args.env}/{dataset_name}.npy', allow_pickle=True).item()
     args.dataset = dataset_name
 
@@ -239,7 +240,8 @@ def main():
     new_pool_size = args.model_retain_epochs * model_steps_per_epoch
     model_pool = ReplayMemory(new_pool_size)
 
-    if args.wandb:
+    #if args.wandb:
+    if True:
         wandb.init(project='codac',
                    group=args.env,
                    name=run_name,
