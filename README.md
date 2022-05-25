@@ -37,7 +37,9 @@ Offline Training Results (normalized_score is eval_reward objective)
 
 <img width="1088" alt="Screen Shot 2022-05-25 at 4 53 48 PM" src="https://user-images.githubusercontent.com/42305684/170365499-832097a4-812e-4b20-a4c2-c901458e0b9c.png">
 
-For these, code was changed in the train_online.py and train_offline.py to change args.wandb to True in all cases. In env/init.py, "from env.ant_obstacle import AntObstacleEnv" was commented out to stop the necessitation of the mujoco installation. In env/PARK/park/envs/load_balance/load_balancer.py lines 71 through 77 are to be changed to test different risk properties for the load balance environment. The commands to run the online and offline training are the same as above. Immediate next steps are to write one method which runs the online and offline tests that take in the risk properties of the environment as parameters to easily generate graphs for each instead of manually running them.
+For these, code was changed in the train_online.py and train_offline.py to change args.wandb to True in all cases. In env/init.py, "from env.ant_obstacle import AntObstacleEnv" was commented out to stop the necessitation of the mujoco installation. In env/PARK/park/envs/load_balance/load_balancer.py lines 71 through 77 are to be changed to test different risk properties for the load balance environment. The commands to run the online and offline training are the same as above. 
+
+Immediate next steps are to write one method which runs the online and offline tests that take in the risk properties of the environment as parameters to easily generate graphs for different parameters instead of manually running for each.
 
 ## Citations
 If you find this repository useful for your research, please cite:
