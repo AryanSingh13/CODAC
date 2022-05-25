@@ -66,8 +66,13 @@ class LoadBalanceEnv(core.Env):
         # finished jobs (for logging at the end)
         self.finished_jobs = []
         # reset environment (generate new jobs)
+        
+        
+        # generate online and offline training graphs by iterating through these values
         self.risk_prob = 1
+        # change self.risk_prob from 0 to 1 in 0.1 increments
         self.risk_pen = 0
+        # changee self.risk_pen from 0 to 1 in 0.5 increments
         self.load_risk_thresh = 0.8
         self.reset()
 
