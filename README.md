@@ -33,7 +33,7 @@ Online Training Results:
 
 <img width="725" alt="Screen Shot 2022-05-25 at 4 41 02 PM" src="https://user-images.githubusercontent.com/42305684/170363220-3c26b4cb-1028-4785-b774-556a4fed52d7.png">
 
-Offline Training Results (Normalized Score is reward objective)
+Offline Training Results (normalized_score is eval_reward objective)
 
 <img width="1086" alt="Screen Shot 2022-05-25 at 4 47 15 PM" src="https://user-images.githubusercontent.com/42305684/170364283-9a81890a-d7fe-42fc-8a99-3ebd44c8191b.png">
 
