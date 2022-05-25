@@ -25,6 +25,15 @@ Then you can run offline training:
 
 ```python train_offline.py --env load_balance --algo codac```
 
+## Load Balancer Results
+
+Results from online and offline training on the expected rewards metric in the load balancer environment with the risk probability of 1 and risk penality of 0. 
+
+Online Training Results:
+
+<img width="725" alt="Screen Shot 2022-05-25 at 4 41 02 PM" src="https://user-images.githubusercontent.com/42305684/170363220-3c26b4cb-1028-4785-b774-556a4fed52d7.png">
+
+
 ## Citations
 If you find this repository useful for your research, please cite:
 ```
